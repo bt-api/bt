@@ -1,0 +1,43 @@
+{
+  "name": "bt-api/bt",
+  "description": "宝塔服务器API接口封装类",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://github.com/bt-api/bt",
+  "authors": [
+    {
+      "name": "bt-api",
+      "email": "82279178@qq.com"
+    }
+  ],
+  "keywords": [
+    "framework",
+    "http",
+    "rest",
+    "web service",
+    "curl",
+    "client",
+    "HTTP client",
+    "PSR-7",
+    "PSR-18",
+    "api"
+  ],
+  "require": {
+    "php": "^7.4.5 || ^8.0",
+    "ext-json": "*",
+    "guzzlehttp/guzzle": "7.4.5"
+  },
+  "require-dev": {
+    "ext-curl": "*"
+  },
+  "suggest": {
+    "ext-curl": "Required for CURL handler support",
+    "ext-intl": "Required for Internationalized Domain Name (IDN) support",
+    "psr/log": "Required for using the Log middleware"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bt\\": "src/"
+    }
+  }
+}
