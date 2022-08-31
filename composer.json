@@ -1,6 +1,6 @@
 {
   "name": "bt-api/bt",
-  "description": "宝塔服务器API接口封装类",
+  "description": "宝塔面板站点操作类库(升级版)",
   "type": "library",
   "license": "MIT",
   "homepage": "https://github.com/bt-api/bt",
