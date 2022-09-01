@@ -1,6 +1,6 @@
 /vendor/
 /.idea/
 composer.lock
-/tests/.htaccess
-/tests/nginx.htaccess
-/tests/index.php
+/**/.htaccess
+/**/nginx.htaccess
+/**/index.php
