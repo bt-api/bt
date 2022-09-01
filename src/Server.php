@@ -1,7 +1,10 @@
 <?php
 namespace Bt;
-
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 /**
+ * Class Server
+ * @package Bt
  * 宝塔面板站点操作类库（该版本是在原有官方类库进行修正升级，并对composer的支持）
  * @author 阿良 or Youngxj(二次开发) or bt-api
  * @link https://www.bt.cn/api-doc.pdf
@@ -11,57 +14,54 @@ namespace Bt;
  * $bt = new Bt('http://127.0.0.1/8888','xxxxxxxxxxxxxxxx');
  * echo $bt->GetSystemTotal();//获取系统基础统计
  */
-class Server extends Uri {
-
-    private $BT_KEY = "";  	//接口密钥
-    private $BT_PANEL = "";	   		//面板地址
-
+class Server extends Uri{
+    private string $BT_KEY = "";  	//接口密钥
+    private string $BT_PANEL = "";	//面板地址
+    private Client $client;         //访问端
     /**
      * 初始化
-     * @param [type] $bt_panel 宝塔接口地址
-     * @param [type] $bt_key   宝塔Api密钥
+     * Server constructor.
+     * @param string|null $bt_panel
+     * @param string|null $bt_key
+     * @param int $timeout
      */
-    public function __construct($bt_panel = null,$bt_key = null){
-        if($bt_panel) $this->BT_PANEL = $bt_panel;
-        if($bt_key) $this->BT_KEY = $bt_key;
+    public function __construct(string $bt_panel = null,string $bt_key = null,int $timeout=60){
+        if($bt_panel)$this->BT_PANEL = $bt_panel;
+        if($bt_key)$this->BT_KEY = $bt_key;
+        $this->client = new Client(['base_uri' => $this->BT_PANEL,'timeout'  => $timeout,'cookies' => true]);
     }
 
     /**
      * 获取系统基础统计
+     * @return array|bool
      */
     public function GetSystemTotal(){
-        $url = $this->BT_PANEL.$this->config("GetSystemTotal");
         $p_data = $this->GetKeyData();
-        $result = $this->HttpPostCookie($url,$p_data);
-        return json_decode($result,true);
+        return $this->HttpPostCookie($this->btUri("GetSystemTotal"),$p_data);
     }
 
     /**
      * 获取磁盘分区信息
      */
     public function GetDiskInfo(){
-        $url = $this->BT_PANEL.$this->config("GetDiskInfo");
         $p_data = $this->GetKeyData();
-        $result = $this->HttpPostCookie($url,$p_data);
-        return json_decode($result,true);
+        return $this->HttpPostCookie($this->btUri("GetDiskInfo"),$p_data);
     }
 
     /**
-     * 获取实时状态信息
-     * (CPU、内存、网络、负载)
+     * 获取实时状态信息(CPU、内存、网络、负载)
+     * @return array|bool
      */
     public function GetNetWork(){
-        $url = $this->BT_PANEL.$this->config("GetNetWork");
         $p_data = $this->GetKeyData();
-        $result = $this->HttpPostCookie($url,$p_data);
-        return json_decode($result,true);
+        return $this->HttpPostCookie($this->btUri("GetNetWork"),$p_data);
     }
 
     /**
      * 检查是否有安装任务
      */
     public function GetTaskCount(){
-        $url = $this->BT_PANEL.$this->config("GetTaskCount");
+        $url = $this->BT_PANEL.$this->btUri("GetTaskCount");
         $p_data = $this->GetKeyData();
         $result = $this->HttpPostCookie($url,$p_data);
         return json_decode($result,true);
@@ -71,7 +71,7 @@ class Server extends Uri {
      * 检查面板更新
      */
     public function UpdatePanel($check=false,$force=false){
-        $url = $this->BT_PANEL.$this->config("UpdatePanel");
+        $url = $this->BT_PANEL.$this->btUri("UpdatePanel");
         $p_data = $this->GetKeyData();
         $p_data['check'] = $check;
         $p_data['force'] = $force;
@@ -91,7 +91,7 @@ class Server extends Uri {
      * @param string $search 搜索内容
      */
     public function Websites($search='',$page='1',$limit='15',$type='-1',$order='id desc',$tojs=''){
-        $url = $this->BT_PANEL.$this->config("Websites");
+        $url = $this->BT_PANEL.$this->btUri("Websites");
         $p_data = $this->GetKeyData();
         $p_data['p'] = $page;
         $p_data['limit'] = $limit;
@@ -113,7 +113,7 @@ class Server extends Uri {
      * @param string $search 搜索内容
      */
     public function WebFtpList($search='',$page='1',$limit='15',$type='-1',$order='id desc',$tojs=''){
-        $url = $this->BT_PANEL.$this->config("WebFtpList");
+        $url = $this->BT_PANEL.$this->btUri("WebFtpList");
         $p_data = $this->GetKeyData();
         $p_data['p'] = $page;
         $p_data['limit'] = $limit;
@@ -135,7 +135,7 @@ class Server extends Uri {
      * @param string $search 搜索内容
      */
     public function WebSqlList($search='',$page='1',$limit='15',$type='-1',$order='id desc',$tojs=''){
-        $url = $this->BT_PANEL.$this->config("WebSqlList");
+        $url = $this->BT_PANEL.$this->btUri("WebSqlList");
         $p_data = $this->GetKeyData();
         $p_data['p'] = $page;
         $p_data['limit'] = $limit;
@@ -151,7 +151,7 @@ class Server extends Uri {
      * 获取所有网站分类
      */
     public function Webtypes(){
-        $url = $this->BT_PANEL.$this->config("Webtypes");
+        $url = $this->BT_PANEL.$this->btUri("Webtypes");
         $p_data = $this->GetKeyData();
         $result = $this->HttpPostCookie($url,$p_data);
         return json_decode($result,true);
@@ -162,7 +162,7 @@ class Server extends Uri {
      */
     public function GetPHPVersion(){
         //拼接URL地址
-        $url = $this->BT_PANEL.$this->config("GetPHPVersion");
+        $url = $this->BT_PANEL.$this->btUri("GetPHPVersion");
         //准备POST数据
         $p_data = $this->GetKeyData();		//取签名
         //请求面板接口
@@ -177,7 +177,7 @@ class Server extends Uri {
      * @param [type] $php  PHP版本
      */
     public function SetPHPVersion($site,$php){
-        $url = $this->BT_PANEL.$this->config("SetPHPVersion");
+        $url = $this->BT_PANEL.$this->btUri("SetPHPVersion");
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $p_data['version'] = $php;
@@ -190,7 +190,7 @@ class Server extends Uri {
      * @param [type] $site 网站名
      */
     public function GetSitePHPVersion($site){
-        $url = $this->BT_PANEL.$this->config("GetSitePHPVersion");
+        $url = $this->BT_PANEL.$this->btUri("GetSitePHPVersion");
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -216,7 +216,7 @@ class Server extends Uri {
      * @param [type] $datapassword 数据库密码
      */
     public function AddSite($infoArr=[]){
-        $url = $this->BT_PANEL.$this->config("WebAddSite");
+        $url = $this->BT_PANEL.$this->btUri("WebAddSite");
         //准备POST数据
         $p_data = $this->GetKeyData();		//取签名
         $p_data['webname'] = $infoArr['webname'];
@@ -249,7 +249,7 @@ class Server extends Uri {
      *
      */
     public function WebDeleteSite($id,$webname,$ftp,$database,$path){
-        $url = $this->BT_PANEL.$this->config("WebDeleteSite");
+        $url = $this->BT_PANEL.$this->btUri("WebDeleteSite");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['webname'] = $webname;
@@ -266,7 +266,7 @@ class Server extends Uri {
      * @param [type] $name 网站域名
      */
     public function WebSiteStop($id,$name){
-        $url = $this->BT_PANEL.$this->config("WebSiteStop");
+        $url = $this->BT_PANEL.$this->btUri("WebSiteStop");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $name;
@@ -280,7 +280,7 @@ class Server extends Uri {
      * @param [type] $name 网站域名
      */
     public function WebSiteStart($id,$name){
-        $url = $this->BT_PANEL.$this->config("WebSiteStart");
+        $url = $this->BT_PANEL.$this->btUri("WebSiteStart");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $name;
@@ -294,7 +294,7 @@ class Server extends Uri {
      * @param [type] $edate 网站到期时间 格式：2019-01-01，永久：0000-00-00
      */
     public function WebSetEdate($id,$edate){
-        $url = $this->BT_PANEL.$this->config("WebSetEdate");
+        $url = $this->BT_PANEL.$this->btUri("WebSetEdate");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['edate'] = $edate;
@@ -308,7 +308,7 @@ class Server extends Uri {
      * @param [type] $ps 网站备注
      */
     public function WebSetPs($id,$ps){
-        $url = $this->BT_PANEL.$this->config("WebSetPs");
+        $url = $this->BT_PANEL.$this->btUri("WebSetPs");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['ps'] = $ps;
@@ -325,7 +325,7 @@ class Server extends Uri {
      * @param string $tojs  分页js回调若不传则构造 URI 分页连接 get_site_backup
      */
     public function WebBackupList($id,$page='1',$limit='5',$type='0',$tojs=''){
-        $url = $this->BT_PANEL.$this->config("WebBackupList");
+        $url = $this->BT_PANEL.$this->btUri("WebBackupList");
         $p_data = $this->GetKeyData();
         $p_data['p'] = $page;
         $p_data['limit'] = $limit;
@@ -341,7 +341,7 @@ class Server extends Uri {
      * @param [type] $id 网站ID
      */
     public function WebToBackup($id){
-        $url = $this->BT_PANEL.$this->config("WebToBackup");
+        $url = $this->BT_PANEL.$this->btUri("WebToBackup");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -353,7 +353,7 @@ class Server extends Uri {
      * @param [type] $id 网站备份ID
      */
     public function WebDelBackup($id){
-        $url = $this->BT_PANEL.$this->config("WebDelBackup");
+        $url = $this->BT_PANEL.$this->btUri("WebDelBackup");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -365,7 +365,7 @@ class Server extends Uri {
      * @param [type] $id 数据库备份ID
      */
     public function SQLDelBackup($id){
-        $url = $this->BT_PANEL.$this->config("SQLDelBackup");
+        $url = $this->BT_PANEL.$this->btUri("SQLDelBackup");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -377,7 +377,7 @@ class Server extends Uri {
      * @param [type] $id 数据库列表ID
      */
     public function SQLToBackup($id){
-        $url = $this->BT_PANEL.$this->config("SQLToBackup");
+        $url = $this->BT_PANEL.$this->btUri("SQLToBackup");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -390,7 +390,7 @@ class Server extends Uri {
      * @param boolean $list 固定传true
      */
     public function WebDoaminList($id,$list=true){
-        $url = $this->BT_PANEL.$this->config("WebDoaminList");
+        $url = $this->BT_PANEL.$this->btUri("WebDoaminList");
         $p_data = $this->GetKeyData();
         $p_data['search'] = $id;
         $p_data['list'] = $list;
@@ -405,7 +405,7 @@ class Server extends Uri {
      * @param [type] $domain  要添加的域名:端口 80 端品不必构造端口,多个域名用换行符隔开
      */
     public function WebAddDomain($id,$webname,$domain){
-        $url = $this->BT_PANEL.$this->config("WebAddDomain");
+        $url = $this->BT_PANEL.$this->btUri("WebAddDomain");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['webname'] = $webname;
@@ -422,7 +422,7 @@ class Server extends Uri {
      * @param [type] $port    网站域名端口
      */
     public function WebDelDomain($id,$webname,$domain,$port){
-        $url = $this->BT_PANEL.$this->config("WebDelDomain");
+        $url = $this->BT_PANEL.$this->btUri("WebDelDomain");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['webname'] = $webname;
@@ -437,7 +437,7 @@ class Server extends Uri {
      * @param [type] $siteName 网站名
      */
     public function GetRewriteList($siteName){
-        $url = $this->BT_PANEL.$this->config("GetRewriteList");
+        $url = $this->BT_PANEL.$this->btUri("GetRewriteList");
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $siteName;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -450,7 +450,7 @@ class Server extends Uri {
      * @param [type] $type 0->获取内置伪静态规则；1->获取当前站点伪静态规则
      */
     public function GetFileBody($path,$type=0){
-        $url = $this->BT_PANEL.$this->config("GetFileBody");
+        $url = $this->BT_PANEL.$this->btUri("GetFileBody");
         $p_data = $this->GetKeyData();
         $path_dir = $type?'vhost/rewrite':'rewrite/nginx';
         //获取当前站点伪静态规则
@@ -474,7 +474,7 @@ class Server extends Uri {
      * @param number $type     0->系统默认路径；1->自定义全路径
      */
     public function SaveFileBody($path,$data,$encoding='utf-8',$type=0){
-        $url = $this->BT_PANEL.$this->config("SaveFileBody");
+        $url = $this->BT_PANEL.$this->btUri("SaveFileBody");
         if($type){
             $path_dir = $path;
         }else{
@@ -497,7 +497,7 @@ class Server extends Uri {
      * @param [type] $password 密码
      */
     public function SetHasPwd($id,$username,$password){
-        $url = $this->BT_PANEL.$this->config("SetHasPwd");
+        $url = $this->BT_PANEL.$this->btUri("SetHasPwd");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['username'] = $username;
@@ -511,7 +511,7 @@ class Server extends Uri {
      * @param [type] $id 网站ID
      */
     public function CloseHasPwd($id){
-        $url = $this->BT_PANEL.$this->config("CloseHasPwd");
+        $url = $this->BT_PANEL.$this->btUri("CloseHasPwd");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -523,7 +523,7 @@ class Server extends Uri {
      * @param [type] $site 网站名
      */
     public function GetSiteLogs($site){
-        $url = $this->BT_PANEL.$this->config("GetSiteLogs");
+        $url = $this->BT_PANEL.$this->btUri("GetSiteLogs");
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -536,7 +536,7 @@ class Server extends Uri {
      * @param [type] $site 网站名
      */
     public function GetSecurity($id,$site){
-        $url = $this->BT_PANEL.$this->config("GetSecurity");
+        $url = $this->BT_PANEL.$this->btUri("GetSecurity");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $site;
@@ -553,7 +553,7 @@ class Server extends Uri {
      * @param [type] $status  状态
      */
     public function SetSecurity($id,$site,$fix,$domains,$status){
-        $url = $this->BT_PANEL.$this->config("SetSecurity");
+        $url = $this->BT_PANEL.$this->btUri("SetSecurity");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $site;
@@ -570,7 +570,7 @@ class Server extends Uri {
      * @param [type] $path 网站运行目录
      */
     public function GetDirUserINI($id,$path){
-        $url = $this->BT_PANEL.$this->config("GetDirUserINI");
+        $url = $this->BT_PANEL.$this->btUri("GetDirUserINI");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['path'] = $path;
@@ -583,7 +583,7 @@ class Server extends Uri {
      * @param [type] $site 网站域名（纯域名）
      */
     public function HttpToHttps($site){
-        $url = $this->BT_PANEL.$this->config("HttpToHttps");
+        $url = $this->BT_PANEL.$this->btUri("HttpToHttps");
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -595,7 +595,7 @@ class Server extends Uri {
      * @param [type] $site 域名(纯域名)
      */
     public function CloseToHttps($site){
-        $url = $this->BT_PANEL.$this->config("CloseToHttps");
+        $url = $this->BT_PANEL.$this->btUri("CloseToHttps");
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -610,7 +610,7 @@ class Server extends Uri {
      * @param [type] $csr  证书PEM
      */
     public function SetSSL($type,$site,$key,$csr){
-        $url = $this->BT_PANEL.$this->config("SetSSL");
+        $url = $this->BT_PANEL.$this->btUri("SetSSL");
         $p_data = $this->GetKeyData();
         $p_data['type'] = $type;
         $p_data['siteName'] = $site;
@@ -627,7 +627,7 @@ class Server extends Uri {
      * @param [type] $site     域名(纯域名)
      */
     public function CloseSSLConf($updateOf,$site){
-        $url = $this->BT_PANEL.$this->config("CloseSSLConf");
+        $url = $this->BT_PANEL.$this->btUri("CloseSSLConf");
         $p_data = $this->GetKeyData();
         $p_data['updateOf'] = $updateOf;
         $p_data['siteName'] = $site;
@@ -640,7 +640,7 @@ class Server extends Uri {
      * @param [type] $site 域名（纯域名）
      */
     public function GetSSL($site){
-        $url = $this->BT_PANEL.$this->config("GetSSL");
+        $url = $this->BT_PANEL.$this->btUri("GetSSL");
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -652,7 +652,7 @@ class Server extends Uri {
      * @param [type] $id 网站ID
      */
     public function WebGetIndex($id){
-        $url = $this->BT_PANEL.$this->config("WebGetIndex");
+        $url = $this->BT_PANEL.$this->btUri("WebGetIndex");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -665,7 +665,7 @@ class Server extends Uri {
      * @param [type] $index 内容
      */
     public function WebSetIndex($id,$index){
-        $url = $this->BT_PANEL.$this->config("WebSetIndex");
+        $url = $this->BT_PANEL.$this->btUri("WebSetIndex");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['Index'] = $index;
@@ -678,7 +678,7 @@ class Server extends Uri {
      * @param [type] $id [description]
      */
     public function GetLimitNet($id){
-        $url = $this->BT_PANEL.$this->config("GetLimitNet");
+        $url = $this->BT_PANEL.$this->btUri("GetLimitNet");
 
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
@@ -694,7 +694,7 @@ class Server extends Uri {
      * @param [type] $limit_rate 流量限制
      */
     public function SetLimitNet($id,$perserver,$perip,$limit_rate){
-        $url = $this->BT_PANEL.$this->config("SetLimitNet");
+        $url = $this->BT_PANEL.$this->btUri("SetLimitNet");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['perserver'] = $perserver;
@@ -709,7 +709,7 @@ class Server extends Uri {
      * @param [type] $id 网站ID
      */
     public function CloseLimitNet($id){
-        $url = $this->BT_PANEL.$this->config("CloseLimitNet");
+        $url = $this->BT_PANEL.$this->btUri("CloseLimitNet");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -721,7 +721,7 @@ class Server extends Uri {
      * @param [type] $site 网站名
      */
     public function Get301Status($site){
-        $url = $this->BT_PANEL.$this->config("Get301Status");
+        $url = $this->BT_PANEL.$this->btUri("Get301Status");
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -736,7 +736,7 @@ class Server extends Uri {
      * @param [type] $type      类型
      */
     public function Set301Status($site,$toDomain,$srcDomain,$type){
-        $url = $this->BT_PANEL.$this->config("Set301Status");
+        $url = $this->BT_PANEL.$this->btUri("Set301Status");
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $p_data['toDomain'] = $toDomain;
@@ -751,7 +751,7 @@ class Server extends Uri {
      * @param [type] $site [description]
      */
     public function GetProxyList($site){
-        $url = $this->BT_PANEL.$this->config("GetProxyList");
+        $url = $this->BT_PANEL.$this->btUri("GetProxyList");
         $p_data = $this->GetKeyData();
         $p_data['sitename'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -772,7 +772,7 @@ class Server extends Uri {
      * @param [type] $type      开启或关闭 0关;1开
      */
     public function CreateProxy($cache,$proxyname,$cachetime,$proxydir,$proxysite,$todomain,$advanced,$sitename,$subfilter,$type){
-        $url = $this->BT_PANEL.$this->config("CreateProxy");
+        $url = $this->BT_PANEL.$this->btUri("CreateProxy");
         $p_data = $this->GetKeyData();
         $p_data['cache'] = $cache;
         $p_data['proxyname'] = $proxyname;
@@ -802,7 +802,7 @@ class Server extends Uri {
      * @param [type] $type      开启或关闭 0关;1开
      */
     public function ModifyProxy($cache,$proxyname,$cachetime,$proxydir,$proxysite,$todomain,$advanced,$sitename,$subfilter,$type){
-        $url = $this->BT_PANEL.$this->config("ModifyProxy");
+        $url = $this->BT_PANEL.$this->btUri("ModifyProxy");
         $p_data = $this->GetKeyData();
         $p_data['cache'] = $cache;
         $p_data['proxyname'] = $proxyname;
@@ -823,7 +823,7 @@ class Server extends Uri {
      * @param [type] $id 网站ID
      */
     public function GetDirBinding($id){
-        $url = $this->BT_PANEL.$this->config("GetDirBinding");
+        $url = $this->BT_PANEL.$this->btUri("GetDirBinding");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -837,7 +837,7 @@ class Server extends Uri {
      * @param [type] $dirName 目录
      */
     public function AddDirBinding($id,$domain,$dirName){
-        $url = $this->BT_PANEL.$this->config("AddDirBinding");
+        $url = $this->BT_PANEL.$this->btUri("AddDirBinding");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['domain'] = $domain;
@@ -851,7 +851,7 @@ class Server extends Uri {
      * @param [type] $dirid 子目录ID
      */
     public function DelDirBinding($dirid){
-        $url = $this->BT_PANEL.$this->config("DelDirBinding");
+        $url = $this->BT_PANEL.$this->btUri("DelDirBinding");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $dirid;
         $result = $this->HttpPostCookie($url,$p_data);
@@ -863,7 +863,7 @@ class Server extends Uri {
      * @param [type] $dirid 子目录绑定ID
      */
     public function GetDirRewrite($dirid,$type=0){
-        $url = $this->BT_PANEL.$this->config("GetDirRewrite");
+        $url = $this->BT_PANEL.$this->btUri("GetDirRewrite");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $dirid;
         if($type){
@@ -880,7 +880,7 @@ class Server extends Uri {
      * @param [type] $new_password 密码
      */
     public function SetUserPassword($id,$ftp_username,$new_password){
-        $url = $this->BT_PANEL.$this->config("SetUserPassword");
+        $url = $this->BT_PANEL.$this->btUri("SetUserPassword");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['ftp_username'] = $ftp_username;
@@ -896,7 +896,7 @@ class Server extends Uri {
      * @param [type] $new_password 密码
      */
     public function ResDatabasePass($id,$name,$password){
-        $url = $this->BT_PANEL.$this->config("ResDatabasePass");
+        $url = $this->BT_PANEL.$this->btUri("ResDatabasePass");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $name;
@@ -912,7 +912,7 @@ class Server extends Uri {
      * @param [type] $status   状态 0->关闭;1->开启
      */
     public function SetStatus($id,$username,$status){
-        $url = $this->BT_PANEL.$this->config("SetStatus");
+        $url = $this->BT_PANEL.$this->btUri("SetStatus");
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['username'] = $username;
@@ -928,9 +928,9 @@ class Server extends Uri {
      */
     public function deployment($search=''){
         if($search){
-            $url = $this->BT_PANEL.$this->config("deployment").'&search='.$search;
+            $url = $this->BT_PANEL.$this->btUri("deployment").'&search='.$search;
         }else{
-            $url = $this->BT_PANEL.$this->config("deployment");
+            $url = $this->BT_PANEL.$this->btUri("deployment");
         }
         $p_data = $this->GetKeyData();
         $result = $this->HttpPostCookie($url,$p_data);
@@ -944,7 +944,7 @@ class Server extends Uri {
      * @param [type] $php_version PHP版本
      */
     public function SetupPackage($dname,$site_name,$php_version){
-        $url = $this->BT_PANEL.$this->config("SetupPackage");
+        $url = $this->BT_PANEL.$this->btUri("SetupPackage");
         $p_data = $this->GetKeyData();
         $p_data['dname'] = $dname;
         $p_data['site_name'] = $site_name;
@@ -953,11 +953,11 @@ class Server extends Uri {
         return json_decode($result,true);
     }
 
-
     /**
      * 构造带有签名的关联数组
+     * @return array
      */
-    public function GetKeyData(){
+    public function GetKeyData(): array{
         $now_time = time();
         return array(
             'request_token'	=>	md5($now_time.''.md5($this->BT_KEY)),
@@ -967,32 +967,23 @@ class Server extends Uri {
 
     /**
      * 发起POST请求
-     * @param String $url 目标网填，带http://
-     * @param Array|String $data 欲提交的数据
-     * @return string
+     * @param $url
+     * @param $p_data
+     * @param int $timeout
+     * @return array|bool
      */
-    private function HttpPostCookie($url, $data,$timeout = 60)
+    private function HttpPostCookie($url, $p_data)
     {
-        //定义cookie保存位置
-        $cookie_file='./'.md5($this->BT_PANEL).'.cookie';
-        if(!file_exists($cookie_file)){
-            $fp = fopen($cookie_file,'w+');
-            fclose($fp);
+        try {
+            $response=$this->client->request('POST', $url,['form_params' => $p_data]);
+            if($response->getStatusCode()==200){
+                $data=json_decode($response->getBody()->getContents(),true);
+                return !empty($data)?(isset($data["status"])?:array("status"=>true,"msg"=>"获取成功！","data"=>$data)):array("status"=>false,"msg"=>"响应数据错误");
+            }else{
+                return array("status"=>false,"msg"=>"响应代码:".$response->getStatusCode());
+            }
+        }catch(GuzzleException $e){
+            return array("status"=>false,"msg"=>$e->getMessage());
         }
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        return $output;
     }
 }

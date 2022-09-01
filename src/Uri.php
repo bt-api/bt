@@ -1,16 +1,12 @@
 <?php
-
-
 namespace Bt;
-
-
 class Uri{
     /**
      * 加载宝塔数据接口
-     * @param  [type] $str [description]
-     * @return [type]      [description]
+     * @param $str [description]
+     * @return string [description]
      */
-    protected function config($str){
+    protected function btUri($str):string{
         $config = array(
             # 系统状态相关接口
             'GetSystemTotal' => '/system?action=GetSystemTotal',	   //获取系统基础统计
@@ -81,8 +77,6 @@ class Uri{
             # 插件管理
             'deployment' => '/plugin?action=a&name=deployment&s=GetList&type=0',       //宝塔一键部署列表
             'SetupPackage' => '/plugin?action=a&name=deployment&s=SetupPackage',       //部署任务
-
-
         );
         return $config[$str];
     }

@@ -48,5 +48,12 @@
       "bamarni/composer-bin-plugin": true
     }
   },
+  "extra": {
+    "think":{
+      "config":{
+        "bt_server": "src/config/server.php"
+      }
+    }
+  },
   "minimum-stability": "dev"
 }
