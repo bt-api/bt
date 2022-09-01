@@ -870,12 +870,12 @@ class Server extends Uri{
 
     /**
      * 发起POST请求
-     * @param $url
-     * @param $p_data
+     * @param string $url
+     * @param array $p_data
      * @param string $search URL是否需要加参数
      * @return array|bool
      */
-    private function HttpPostCookie($url, $p_data,$search=''){
+    private function HttpPostCookie(string $url='', array $p_data=[], string $search=''){
         try {
             $response=$this->client->request('POST',$search?$url.$search:$url,['form_params' => $p_data]);
             if($response->getStatusCode()==200){
