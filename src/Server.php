@@ -880,7 +880,7 @@ class Server extends Uri{
             $response=$this->client->request('POST',$search?$url.$search:$url,['form_params' => $p_data]);
             if($response->getStatusCode()==200){
                 $data=json_decode($response->getBody()->getContents(),true);
-                return !empty($data)?(isset($data["status"])?:array("status"=>true,"msg"=>"获取成功！","data"=>$data)):array("status"=>false,"msg"=>"响应数据错误");
+                return !empty($data)?(isset($data["status"])?$data:array("status"=>true,"msg"=>"获取成功！","data"=>$data)):array("status"=>false,"msg"=>"响应数据错误");
             }else{
                 return array("status"=>false,"msg"=>"响应代码:".$response->getStatusCode());
             }
