@@ -47,5 +47,6 @@
     "allow-plugins": {
       "bamarni/composer-bin-plugin": true
     }
-  }
+  },
+  "minimum-stability": "dev"
 }

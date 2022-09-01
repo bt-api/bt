@@ -31,13 +31,9 @@ class Server extends Uri {
      */
     public function GetSystemTotal(){
         $url = $this->BT_PANEL.$this->config("GetSystemTotal");
-
         $p_data = $this->GetKeyData();
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -45,13 +41,9 @@ class Server extends Uri {
      */
     public function GetDiskInfo(){
         $url = $this->BT_PANEL.$this->config("GetDiskInfo");
-
         $p_data = $this->GetKeyData();
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -60,13 +52,9 @@ class Server extends Uri {
      */
     public function GetNetWork(){
         $url = $this->BT_PANEL.$this->config("GetNetWork");
-
         $p_data = $this->GetKeyData();
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -74,13 +62,9 @@ class Server extends Uri {
      */
     public function GetTaskCount(){
         $url = $this->BT_PANEL.$this->config("GetTaskCount");
-
         $p_data = $this->GetKeyData();
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -88,15 +72,11 @@ class Server extends Uri {
      */
     public function UpdatePanel($check=false,$force=false){
         $url = $this->BT_PANEL.$this->config("UpdatePanel");
-
         $p_data = $this->GetKeyData();
         $p_data['check'] = $check;
         $p_data['force'] = $force;
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
 
@@ -112,7 +92,6 @@ class Server extends Uri {
      */
     public function Websites($search='',$page='1',$limit='15',$type='-1',$order='id desc',$tojs=''){
         $url = $this->BT_PANEL.$this->config("Websites");
-
         $p_data = $this->GetKeyData();
         $p_data['p'] = $page;
         $p_data['limit'] = $limit;
@@ -120,11 +99,8 @@ class Server extends Uri {
         $p_data['order'] = $order;
         $p_data['tojs'] = $tojs;
         $p_data['search'] = $search;
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -138,7 +114,6 @@ class Server extends Uri {
      */
     public function WebFtpList($search='',$page='1',$limit='15',$type='-1',$order='id desc',$tojs=''){
         $url = $this->BT_PANEL.$this->config("WebFtpList");
-
         $p_data = $this->GetKeyData();
         $p_data['p'] = $page;
         $p_data['limit'] = $limit;
@@ -146,11 +121,8 @@ class Server extends Uri {
         $p_data['order'] = $order;
         $p_data['tojs'] = $tojs;
         $p_data['search'] = $search;
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -164,7 +136,6 @@ class Server extends Uri {
      */
     public function WebSqlList($search='',$page='1',$limit='15',$type='-1',$order='id desc',$tojs=''){
         $url = $this->BT_PANEL.$this->config("WebSqlList");
-
         $p_data = $this->GetKeyData();
         $p_data['p'] = $page;
         $p_data['limit'] = $limit;
@@ -172,11 +143,8 @@ class Server extends Uri {
         $p_data['order'] = $order;
         $p_data['tojs'] = $tojs;
         $p_data['search'] = $search;
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -184,13 +152,9 @@ class Server extends Uri {
      */
     public function Webtypes(){
         $url = $this->BT_PANEL.$this->config("Webtypes");
-
         $p_data = $this->GetKeyData();
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -199,17 +163,12 @@ class Server extends Uri {
     public function GetPHPVersion(){
         //拼接URL地址
         $url = $this->BT_PANEL.$this->config("GetPHPVersion");
-
         //准备POST数据
         $p_data = $this->GetKeyData();		//取签名
-
         //请求面板接口
         $result = $this->HttpPostCookie($url,$p_data);
-
         //解析JSON数据
-        $data = json_decode($result,true);
-
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -218,16 +177,12 @@ class Server extends Uri {
      * @param [type] $php  PHP版本
      */
     public function SetPHPVersion($site,$php){
-
         $url = $this->BT_PANEL.$this->config("SetPHPVersion");
-
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $p_data['version'] = $php;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -236,13 +191,10 @@ class Server extends Uri {
      */
     public function GetSitePHPVersion($site){
         $url = $this->BT_PANEL.$this->config("GetSitePHPVersion");
-
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
 
@@ -265,7 +217,6 @@ class Server extends Uri {
      */
     public function AddSite($infoArr=[]){
         $url = $this->BT_PANEL.$this->config("WebAddSite");
-
         //准备POST数据
         $p_data = $this->GetKeyData();		//取签名
         $p_data['webname'] = $infoArr['webname'];
@@ -282,15 +233,10 @@ class Server extends Uri {
         $p_data['codeing'] = $infoArr['codeing'];
         $p_data['datauser'] = $infoArr['datauser'];
         $p_data['datapassword'] = $infoArr['datapassword'];
-
-
-
         //请求面板接口
         $result = $this->HttpPostCookie($url,$p_data);
-
         //解析JSON数据
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -304,18 +250,14 @@ class Server extends Uri {
      */
     public function WebDeleteSite($id,$webname,$ftp,$database,$path){
         $url = $this->BT_PANEL.$this->config("WebDeleteSite");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['webname'] = $webname;
         $p_data['ftp'] = $ftp;
         $p_data['database'] = $database;
         $p_data['path'] = $path;
-
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -325,14 +267,11 @@ class Server extends Uri {
      */
     public function WebSiteStop($id,$name){
         $url = $this->BT_PANEL.$this->config("WebSiteStop");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $name;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -342,14 +281,11 @@ class Server extends Uri {
      */
     public function WebSiteStart($id,$name){
         $url = $this->BT_PANEL.$this->config("WebSiteStart");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $name;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -359,14 +295,11 @@ class Server extends Uri {
      */
     public function WebSetEdate($id,$edate){
         $url = $this->BT_PANEL.$this->config("WebSetEdate");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['edate'] = $edate;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -376,14 +309,11 @@ class Server extends Uri {
      */
     public function WebSetPs($id,$ps){
         $url = $this->BT_PANEL.$this->config("WebSetPs");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['ps'] = $ps;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -396,7 +326,6 @@ class Server extends Uri {
      */
     public function WebBackupList($id,$page='1',$limit='5',$type='0',$tojs=''){
         $url = $this->BT_PANEL.$this->config("WebBackupList");
-
         $p_data = $this->GetKeyData();
         $p_data['p'] = $page;
         $p_data['limit'] = $limit;
@@ -404,9 +333,7 @@ class Server extends Uri {
         $p_data['tojs'] = $tojs;
         $p_data['search'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -415,13 +342,10 @@ class Server extends Uri {
      */
     public function WebToBackup($id){
         $url = $this->BT_PANEL.$this->config("WebToBackup");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -430,13 +354,10 @@ class Server extends Uri {
      */
     public function WebDelBackup($id){
         $url = $this->BT_PANEL.$this->config("WebDelBackup");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -445,13 +366,10 @@ class Server extends Uri {
      */
     public function SQLDelBackup($id){
         $url = $this->BT_PANEL.$this->config("SQLDelBackup");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -460,13 +378,10 @@ class Server extends Uri {
      */
     public function SQLToBackup($id){
         $url = $this->BT_PANEL.$this->config("SQLToBackup");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -476,14 +391,11 @@ class Server extends Uri {
      */
     public function WebDoaminList($id,$list=true){
         $url = $this->BT_PANEL.$this->config("WebDoaminList");
-
         $p_data = $this->GetKeyData();
         $p_data['search'] = $id;
         $p_data['list'] = $list;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -494,15 +406,12 @@ class Server extends Uri {
      */
     public function WebAddDomain($id,$webname,$domain){
         $url = $this->BT_PANEL.$this->config("WebAddDomain");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['webname'] = $webname;
         $p_data['domain'] = $domain;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -514,16 +423,13 @@ class Server extends Uri {
      */
     public function WebDelDomain($id,$webname,$domain,$port){
         $url = $this->BT_PANEL.$this->config("WebDelDomain");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['webname'] = $webname;
         $p_data['domain'] = $domain;
         $p_data['port'] = $port;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -532,13 +438,10 @@ class Server extends Uri {
      */
     public function GetRewriteList($siteName){
         $url = $this->BT_PANEL.$this->config("GetRewriteList");
-
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $siteName;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -550,7 +453,6 @@ class Server extends Uri {
         $url = $this->BT_PANEL.$this->config("GetFileBody");
         $p_data = $this->GetKeyData();
         $path_dir = $type?'vhost/rewrite':'rewrite/nginx';
-
         //获取当前站点伪静态规则
         ///www/server/panel/vhost/rewrite/user_hvVBT_1.test.com.conf
         //获取内置伪静态规则
@@ -561,9 +463,7 @@ class Server extends Uri {
         $p_data['path'] = '/www/server/panel/'.$path_dir.'/'.$path.'.conf';
         //var_dump($p_data['path']);
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -585,9 +485,7 @@ class Server extends Uri {
         $p_data['data'] = $data;
         $p_data['encoding'] = $encoding;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
 
@@ -600,15 +498,12 @@ class Server extends Uri {
      */
     public function SetHasPwd($id,$username,$password){
         $url = $this->BT_PANEL.$this->config("SetHasPwd");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['username'] = $username;
         $p_data['password'] = $password;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -617,13 +512,10 @@ class Server extends Uri {
      */
     public function CloseHasPwd($id){
         $url = $this->BT_PANEL.$this->config("CloseHasPwd");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -632,13 +524,10 @@ class Server extends Uri {
      */
     public function GetSiteLogs($site){
         $url = $this->BT_PANEL.$this->config("GetSiteLogs");
-
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -648,14 +537,11 @@ class Server extends Uri {
      */
     public function GetSecurity($id,$site){
         $url = $this->BT_PANEL.$this->config("GetSecurity");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -668,7 +554,6 @@ class Server extends Uri {
      */
     public function SetSecurity($id,$site,$fix,$domains,$status){
         $url = $this->BT_PANEL.$this->config("SetSecurity");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $site;
@@ -676,9 +561,7 @@ class Server extends Uri {
         $p_data['domains'] = $domains;
         $p_data['status'] = $status;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -688,14 +571,11 @@ class Server extends Uri {
      */
     public function GetDirUserINI($id,$path){
         $url = $this->BT_PANEL.$this->config("GetDirUserINI");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['path'] = $path;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -704,13 +584,10 @@ class Server extends Uri {
      */
     public function HttpToHttps($site){
         $url = $this->BT_PANEL.$this->config("HttpToHttps");
-
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -719,13 +596,10 @@ class Server extends Uri {
      */
     public function CloseToHttps($site){
         $url = $this->BT_PANEL.$this->config("CloseToHttps");
-
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -737,16 +611,13 @@ class Server extends Uri {
      */
     public function SetSSL($type,$site,$key,$csr){
         $url = $this->BT_PANEL.$this->config("SetSSL");
-
         $p_data = $this->GetKeyData();
         $p_data['type'] = $type;
         $p_data['siteName'] = $site;
         $p_data['key'] = $key;
         $p_data['csr'] = $csr;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
 
     }
 
@@ -757,14 +628,11 @@ class Server extends Uri {
      */
     public function CloseSSLConf($updateOf,$site){
         $url = $this->BT_PANEL.$this->config("CloseSSLConf");
-
         $p_data = $this->GetKeyData();
         $p_data['updateOf'] = $updateOf;
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -773,13 +641,10 @@ class Server extends Uri {
      */
     public function GetSSL($site){
         $url = $this->BT_PANEL.$this->config("GetSSL");
-
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -788,13 +653,10 @@ class Server extends Uri {
      */
     public function WebGetIndex($id){
         $url = $this->BT_PANEL.$this->config("WebGetIndex");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -804,14 +666,11 @@ class Server extends Uri {
      */
     public function WebSetIndex($id,$index){
         $url = $this->BT_PANEL.$this->config("WebSetIndex");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['Index'] = $index;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -824,9 +683,7 @@ class Server extends Uri {
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -838,16 +695,13 @@ class Server extends Uri {
      */
     public function SetLimitNet($id,$perserver,$perip,$limit_rate){
         $url = $this->BT_PANEL.$this->config("SetLimitNet");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['perserver'] = $perserver;
         $p_data['perip'] = $perip;
         $p_data['limit_rate'] = $limit_rate;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -856,13 +710,10 @@ class Server extends Uri {
      */
     public function CloseLimitNet($id){
         $url = $this->BT_PANEL.$this->config("CloseLimitNet");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -871,13 +722,10 @@ class Server extends Uri {
      */
     public function Get301Status($site){
         $url = $this->BT_PANEL.$this->config("Get301Status");
-
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -889,16 +737,13 @@ class Server extends Uri {
      */
     public function Set301Status($site,$toDomain,$srcDomain,$type){
         $url = $this->BT_PANEL.$this->config("Set301Status");
-
         $p_data = $this->GetKeyData();
         $p_data['siteName'] = $site;
         $p_data['toDomain'] = $toDomain;
         $p_data['srcDomain'] = $srcDomain;
         $p_data['type'] = $type;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -907,13 +752,10 @@ class Server extends Uri {
      */
     public function GetProxyList($site){
         $url = $this->BT_PANEL.$this->config("GetProxyList");
-
         $p_data = $this->GetKeyData();
         $p_data['sitename'] = $site;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -931,7 +773,6 @@ class Server extends Uri {
      */
     public function CreateProxy($cache,$proxyname,$cachetime,$proxydir,$proxysite,$todomain,$advanced,$sitename,$subfilter,$type){
         $url = $this->BT_PANEL.$this->config("CreateProxy");
-
         $p_data = $this->GetKeyData();
         $p_data['cache'] = $cache;
         $p_data['proxyname'] = $proxyname;
@@ -944,9 +785,7 @@ class Server extends Uri {
         $p_data['subfilter'] = $subfilter;
         $p_data['type'] = $type;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -964,7 +803,6 @@ class Server extends Uri {
      */
     public function ModifyProxy($cache,$proxyname,$cachetime,$proxydir,$proxysite,$todomain,$advanced,$sitename,$subfilter,$type){
         $url = $this->BT_PANEL.$this->config("ModifyProxy");
-
         $p_data = $this->GetKeyData();
         $p_data['cache'] = $cache;
         $p_data['proxyname'] = $proxyname;
@@ -977,9 +815,7 @@ class Server extends Uri {
         $p_data['subfilter'] = $subfilter;
         $p_data['type'] = $type;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -988,13 +824,10 @@ class Server extends Uri {
      */
     public function GetDirBinding($id){
         $url = $this->BT_PANEL.$this->config("GetDirBinding");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -1005,15 +838,12 @@ class Server extends Uri {
      */
     public function AddDirBinding($id,$domain,$dirName){
         $url = $this->BT_PANEL.$this->config("AddDirBinding");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['domain'] = $domain;
         $p_data['dirName'] = $dirName;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -1022,13 +852,10 @@ class Server extends Uri {
      */
     public function DelDirBinding($dirid){
         $url = $this->BT_PANEL.$this->config("DelDirBinding");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $dirid;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -1037,16 +864,13 @@ class Server extends Uri {
      */
     public function GetDirRewrite($dirid,$type=0){
         $url = $this->BT_PANEL.$this->config("GetDirRewrite");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $dirid;
         if($type){
             $p_data['add'] = 1;
         }
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -1057,15 +881,12 @@ class Server extends Uri {
      */
     public function SetUserPassword($id,$ftp_username,$new_password){
         $url = $this->BT_PANEL.$this->config("SetUserPassword");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['ftp_username'] = $ftp_username;
         $p_data['new_password'] = $new_password;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -1076,15 +897,12 @@ class Server extends Uri {
      */
     public function ResDatabasePass($id,$name,$password){
         $url = $this->BT_PANEL.$this->config("ResDatabasePass");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['name'] = $name;
         $p_data['password'] = $password;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -1095,15 +913,12 @@ class Server extends Uri {
      */
     public function SetStatus($id,$username,$status){
         $url = $this->BT_PANEL.$this->config("SetStatus");
-
         $p_data = $this->GetKeyData();
         $p_data['id'] = $id;
         $p_data['username'] = $username;
         $p_data['status'] = $status;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -1117,12 +932,9 @@ class Server extends Uri {
         }else{
             $url = $this->BT_PANEL.$this->config("deployment");
         }
-
         $p_data = $this->GetKeyData();
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
     /**
@@ -1133,15 +945,12 @@ class Server extends Uri {
      */
     public function SetupPackage($dname,$site_name,$php_version){
         $url = $this->BT_PANEL.$this->config("SetupPackage");
-
         $p_data = $this->GetKeyData();
         $p_data['dname'] = $dname;
         $p_data['site_name'] = $site_name;
         $p_data['php_version'] = $php_version;
         $result = $this->HttpPostCookie($url,$p_data);
-
-        $data = json_decode($result,true);
-        return $data;
+        return json_decode($result,true);
     }
 
 
@@ -1150,11 +959,10 @@ class Server extends Uri {
      */
     public function GetKeyData(){
         $now_time = time();
-        $p_data = array(
+        return array(
             'request_token'	=>	md5($now_time.''.md5($this->BT_KEY)),
             'request_time'	=>	$now_time
         );
-        return $p_data;
     }
 
     /**
